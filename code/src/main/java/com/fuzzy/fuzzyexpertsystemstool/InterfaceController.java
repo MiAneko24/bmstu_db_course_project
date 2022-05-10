@@ -3,9 +3,7 @@ package com.fuzzy.fuzzyexpertsystemstool;
 import com.fuzzy.fuzzyexpertsystemstool.database.DatabaseWorker;
 import com.fuzzy.fuzzyexpertsystemstool.dbmodel.DBSystem;
 import com.fuzzy.fuzzyexpertsystemstool.dbmodel.OutputResult;
-import com.fuzzy.fuzzyexpertsystemstool.model.MembershipFunction;
-import com.fuzzy.fuzzyexpertsystemstool.model.Rule;
-import com.fuzzy.fuzzyexpertsystemstool.model.Variable;
+import com.fuzzy.fuzzyexpertsystemstool.model.*;
 import com.fuzzy.fuzzyexpertsystemstool.types.FunctionType;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 
+import java.lang.System;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -155,12 +154,13 @@ public class InterfaceController {
     private ObservableList<String> sSpecs = FXCollections.observableArrayList();
     private ObservableList<String> antVars = FXCollections.observableArrayList();
     private ObservableList<String> antTerms = FXCollections.observableArrayList();
+    private ObservableList<String> antConnections = FXCollections.observableArrayList();
     private ObservableList<String> conVars = FXCollections.observableArrayList();
     private ObservableList<String> conVarTerms = FXCollections.observableArrayList();
     private ObservableList<String> consequents = FXCollections.observableArrayList();
     private DatabaseWorker worker = null;
     private Integer currentSystem = null;
-    private Integer currentRule = null;
+    private Rule currentRule = null;
 
 
 
@@ -182,7 +182,8 @@ public class InterfaceController {
                 if (event.getClickCount() == 2) {
                     System.out.println("Click!");
                     int currentItemSelected = systemsview.getSelectionModel().getSelectedIndex();
-                    selectSystem(currentItemSelected);
+                    if (currentItemSelected >= 0)
+                        selectSystem(currentItemSelected);
                 }
             }
         });
@@ -224,8 +225,9 @@ public class InterfaceController {
         rulesView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                currentRule = rulesView.getSelectionModel().getSelectedIndex();
-                selectRule();
+                int i = rulesView.getSelectionModel().getSelectedIndex();
+                if (i >= 0)
+                    selectRule(i);
             }
         });
         hideRuleParams();
@@ -313,7 +315,8 @@ public class InterfaceController {
             variablesView.setItems(variables);
             variablesView.setOnMouseClicked(event -> {
                 int cur = variablesView.getSelectionModel().getSelectedIndex();
-                selectVariable(cur);
+                if (cur >= 0)
+                   selectVariable(cur);
             });
         }
 
@@ -425,28 +428,124 @@ public class InterfaceController {
         mfGraph.setVisible(false);
     }
 
-    private void selectRule() {
-        if (currentRule != null)
-            showRuleData();
+    private void selectRule(int i) {
+        showRuleData(i);
     }
 
-    private void showRuleData() {
+    private void showRuleData(int i) {
         mfAntecedentsLabel.setVisible(true);
         membershipFunctionsView.setVisible(true);
         mfAntecedentsLabel.setText("Антецеденты");
         membershipFunctions.clear();
-        Rule rule = worker.getRuleData(currentRule);
-        membershipFunctions.addAll(rule.getAntecedentsText());
+        currentRule = worker.getRuleData(i);
+        membershipFunctions.addAll(currentRule.getAntecedentsText());
         membershipFunctionsView.setItems(membershipFunctions);
         conLabel.setVisible(true);
         consList.setVisible(true);
         consequents.clear();
-        consequents.addAll(rule.getConsequentsText());
+        consequents.addAll(currentRule.getConsequentsText());
         consList.setItems(consequents);
+        membershipFunctionsView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                int i = membershipFunctionsView.getSelectionModel().getSelectedIndex();
+                if (i >= 0)
+                    selectAntecedent(i);
+            }
+        });
+
+        consList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                int i = consList.getSelectionModel().getSelectedIndex();
+                if (i >= 0)
+                    selectConsequent(i);
+            }
+        });
 
     }
 
+    private void selectConsequent(int i) {
+        conVarLabel.setVisible(true);
+        Consequent consequent = currentRule.getConsequents().get(i);
+        boolean isSugeno = consequent.getVariable() != null;
+        MembershipFunction function = consequent.getMembershipFunction();
+        Variable variable = (isSugeno) ? consequent.getVariable() : function.getVariable();
+        conVars.add(variable.getName());
+        conVarBox.setVisible(true);
+        conVarBox.setItems(conVars);
+        conVarBox.setValue(conVars.get(0));
+        isEqLabel.setVisible(true);
+        conVarTermLabel.setVisible(true);
+        conVarTerms.clear();
+        if (isSugeno) {
+            isEqLabel.setText("=");
+            conCoeffLabel.setVisible(true);
+            conCoeffInput.setVisible(true);
+            conCoeffInput.setText(function.getParameter1().toString());
+            conCoeffInput.setEditable(false);
+            conVarTermLabel.setText("Переменная");
+            conVarTerms.add((function.getVariable() != null)
+                    ? function.getVariable().getName()
+                    : "None");
+        } else {
+            isEqLabel.setText("is");
+            conVarTermLabel.setText("Терм:");
+            conVarTerms.add(function.getTerm());
+        }
+        conVarTermBox.setVisible(true);
+        conVarTermBox.setItems(conVarTerms);
+        conVarTermBox.setValue(conVarTerms.get(0));
+    }
+
+    private void hideConsequentParams() {
+        conVarLabel.setVisible(false);
+        conVarBox.setVisible(false);
+        isEqLabel.setVisible(false);
+        conCoeffLabel.setVisible(false);
+        conCoeffInput.setVisible(false);
+        conVarTermLabel.setVisible(false);
+        conVarTermBox.setVisible(false);
+    }
+
+    private void selectAntecedent(int i) {
+        antVarLabel.setVisible(true);
+        antVars.clear();
+        Antecedent antecedent = currentRule.getAntecedents().get(i);
+        MembershipFunction function = antecedent.getMembershipFunction();
+        Variable var = function.getVariable();
+        antVars.add(var.getName());
+        antVarBox.setVisible(true);
+        antVarBox.setItems(antVars);
+        antVarBox.setValue(antVars.get(0));
+        isLabel.setVisible(true);
+        antTermLabel.setVisible(true);
+        antTerms.clear();
+        antTerms.add(function.getTerm());
+        antTermBox.setVisible(true);
+        antTermBox.setItems(antTerms);
+        antTermBox.setValue(antTerms.get(0));
+        antConLabel.setVisible(true);
+        antConnections.clear();
+        antConnections.add(currentRule.getAntecedentConnectionType().toString());
+        antConBox.setVisible(true);
+        antConBox.setItems(antConnections);
+        antConBox.setValue(antConnections.get(0));
+    }
+
+    private void hideAntecedentParams() {
+        antVarLabel.setVisible(false);
+        antVarBox.setVisible(false);
+        isLabel.setVisible(false);
+        antTermLabel.setVisible(false);
+        antTermBox.setVisible(false);
+        antConLabel.setVisible(false);
+        antConBox.setVisible(false);
+    }
+
     private void hideRuleParams() {
+        hideAntecedentParams();
+        hideConsequentParams();
         mfAntecedentsLabel.setVisible(false);
         membershipFunctionsView.setVisible(false);
         antVarLabel.setVisible(false);
