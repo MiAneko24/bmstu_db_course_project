@@ -12,7 +12,9 @@ public class ConsequentParser implements Parser<DBConsequent> {
         try {
             if (res.next()) {
                 int id = res.getInt("c_id");
-                int mId = res.getInt("m_id");
+                Integer mId = res.getInt("m_id");
+                if (res.wasNull())
+                    mId = null;
                 int rId = res.getInt("r_id");
                 Integer vId = res.getInt("v_id");
                 if (res.wasNull())

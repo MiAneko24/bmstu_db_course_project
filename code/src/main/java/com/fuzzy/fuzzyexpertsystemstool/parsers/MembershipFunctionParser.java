@@ -33,9 +33,6 @@ public class MembershipFunctionParser implements Parser<DBMembershipFunction> {
                 Double parameter4 = res.getDouble("parameter4");
                 if (res.wasNull())
                     parameter4 = null;
-                Double value = res.getDouble("m_value");
-                if (res.wasNull())
-                    value = null;
                 Integer pid = res.getInt("p_id");
                 if (res.wasNull())
                     pid = null;
@@ -47,7 +44,6 @@ public class MembershipFunctionParser implements Parser<DBMembershipFunction> {
                         parameter2,
                         parameter3,
                         parameter4,
-                        value,
                         pid,
                         BarrierType.getBarrierType(res.getString("barrier")),
                         res.getBoolean("is_active")

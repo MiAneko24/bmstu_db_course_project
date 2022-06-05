@@ -39,12 +39,35 @@ public class RuleAntecedentsDao implements Dao<DBRuleAntecedents> {
         return ra;
     }
 
+    private DBRuleAntecedents checkIfExist(DBRuleAntecedents dbRuleAntecedents) {
+        DBRuleAntecedents ant = null;
+        if (connection.isValid()) {
+            PreparedStatement st = connection.getPreparedStatement("select * from rule_antecedents where r_id = " + dbRuleAntecedents.getRuleId() +
+                    " and a_id = " + dbRuleAntecedents.getAntecendentId() + ";");
+            try {
+                ResultSet res = st.executeQuery();
+                ant = parser.parse(res);
+                res.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                connection.closePreparedStatement(st);
+            }
+        }
+        return ant;
+    }
+
     @Override
     public void save(DBRuleAntecedents dbRuleAntecedents) {
         if (connection.isValid()) {
             List<UserType> types = connection.getUserTypes();
             if (types == null)
                 return;
+            System.out.println("check " + "(r="+ dbRuleAntecedents.getRuleId() + ", a=" + dbRuleAntecedents.getAntecendentId() + ");");
+            if (checkIfExist(dbRuleAntecedents) != null) {
+                System.out.println("out\n");
+                return;
+            }
             StringBuilder query = new StringBuilder("insert into");
             if (types.contains(UserType.Admin))
                 query.append(" rule_antecedents");

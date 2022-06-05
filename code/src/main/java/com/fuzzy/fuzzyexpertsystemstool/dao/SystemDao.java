@@ -56,11 +56,18 @@ public class SystemDao implements Dao<DBSystem> {
     public void save(DBSystem dbSystem) {
         if (connection.isValid()) {
             List<UserType> types = connection.getUserTypes();
-            if (types == null || !types.contains(UserType.Admin))
+            if (types == null || !types.contains(UserType.Admin)) {
+                System.out.println("Cry");
                 return;
+            }
+            if (get(dbSystem.getId()) != null) {
+                update(dbSystem);
+                return;
+            }
+            System.out.println("welelelel");
             PreparedStatement st = connection.getPreparedStatement("insert into system values" +
-                    "(" + dbSystem.getId() + ", " + dbSystem.getName() +
-                    ", " + dbSystem.getType() + ", " + dbSystem.getSpecialization() + ");");
+                    "(" + dbSystem.getId() + ", '" + dbSystem.getName() +
+                    "', '" + dbSystem.getType() + "', '" + dbSystem.getSpecialization() + "');");
             try {
                 st.executeUpdate();
             } catch (SQLException e) {
@@ -77,9 +84,9 @@ public class SystemDao implements Dao<DBSystem> {
             List<UserType> types = connection.getUserTypes();
             if (types == null || !types.contains(UserType.Admin))
                 return;
-            PreparedStatement st = connection.getPreparedStatement("update system set s_name = "
-                    + dbSystem.getName() + ", s_type = " + dbSystem.getType() +
-                    ", specialization = " + dbSystem.getSpecialization() + " where s_id = " + dbSystem.getId() + ";");
+            PreparedStatement st = connection.getPreparedStatement("update system set s_name = '"
+                    + dbSystem.getName() + "', s_type = '" + dbSystem.getType() +
+                    "', specialization = '" + dbSystem.getSpecialization() + "' where s_id = " + dbSystem.getId() + ";");
             try {
                 st.executeUpdate();
             } catch (SQLException e) {

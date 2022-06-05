@@ -23,7 +23,9 @@ public class AntecedentRepository {
         for (DBAntecedent a: dbAntecedents) {
             antecedents.add(new Antecedent(
                     a.getId(),
-                    membershipFunctionRepository.getMembershipFunction(a.getMembershipFunctionId()),
+                    (a.getMembershipFunctionId() != null)
+                        ? membershipFunctionRepository.getMembershipFunction(a.getMembershipFunctionId())
+                        : null,
                     getAntecedentText(a.getId())));
         }
         return antecedents;
@@ -32,8 +34,13 @@ public class AntecedentRepository {
     public List<String> getAntecedentsText(int rId) {
         List<String> antecedentsText = new ArrayList<>();
         for (Antecedent a : getAntecedents(rId)) {
-            MembershipFunction function = a.getMembershipFunction();
-            antecedentsText.add(function.getVariable().getName() + " is " + function.getTerm());
+            if (a.getMembershipFunction() != null) {
+                MembershipFunction function = a.getMembershipFunction();
+                antecedentsText.add(function.getVariable().getName() + " is " + function.getTerm());
+            }
+            else {
+                antecedentsText.add("");
+            }
         }
         return antecedentsText;
     }
@@ -41,9 +48,36 @@ public class AntecedentRepository {
     public String getAntecedentText(int aId) {
         DBAntecedent a = getAntecedent(aId);
         if (a != null) {
-            MembershipFunction function = membershipFunctionRepository.getMembershipFunction(a.getMembershipFunctionId());
-            return function.getVariable().getName() + " is " + function.getTerm();
+            if (a.getMembershipFunctionId() != null) {
+                MembershipFunction function = membershipFunctionRepository.getMembershipFunction(a.getMembershipFunctionId());
+                return function.getVariable().getName() + " is " + function.getTerm();
+            }
+            else
+                return "antecedent";
         }
         return null;
+    }
+
+    private DBAntecedent transform(Antecedent antecedent) {
+        return (antecedent != null)
+                ? new DBAntecedent(antecedent.getId(), (antecedent.getMembershipFunction() != null)
+                    ? antecedent.getMembershipFunction().getId()
+                    : null)
+                : null;
+    }
+
+    public void save(List<Antecedent> antecedents) {
+        if (antecedents != null) {
+            for (Antecedent a: antecedents) {
+                antecendentDao.save(transform(a));
+            }
+        }
+    }
+    public void delete(List<Antecedent> antecedents) {
+        if (antecedents != null) {
+            for (Antecedent a: antecedents) {
+                antecendentDao.delete(transform(a));
+            }
+        }
     }
 }

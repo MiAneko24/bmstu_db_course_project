@@ -61,6 +61,10 @@ public class RuleDao implements Dao<DBRule> {
             List<UserType> types = connection.getUserTypes();
             if (types == null)
                 return;
+            if (get(dbRule.getId()) != null) {
+                update(dbRule);
+                return;
+            }
             StringBuilder query = new StringBuilder("insert into");
             if (types.contains(UserType.Admin))
                 query.append(" rule");
@@ -74,8 +78,8 @@ public class RuleDao implements Dao<DBRule> {
                 return;
             query.append(" values" + "(")
                     .append(dbRule.getId()).append(", ")
-                    .append(dbRule.getSystemId()).append(", ")
-                    .append(dbRule.getConnectionType()).append(", ")
+                    .append(dbRule.getSystemId()).append(", '")
+                    .append(dbRule.getConnectionType()).append("', ")
                     .append(dbRule.getWeight()).append(");");
             PreparedStatement st = connection.getPreparedStatement(query.toString());
             try {
@@ -106,8 +110,8 @@ public class RuleDao implements Dao<DBRule> {
             else
                 return;
             query.append(" set s_id = ").append(dbRule.getSystemId())
-                    .append(", antecedent_connection = ").append(dbRule.getConnectionType())
-                    .append(", weight = ").append(dbRule.getWeight())
+                    .append(", antecedent_connection = '").append(dbRule.getConnectionType())
+                    .append("', weight = ").append(dbRule.getWeight())
                     .append(" where r_id = ").append(dbRule.getId()).append(";");
             PreparedStatement st = connection.getPreparedStatement(query.toString());
             try {

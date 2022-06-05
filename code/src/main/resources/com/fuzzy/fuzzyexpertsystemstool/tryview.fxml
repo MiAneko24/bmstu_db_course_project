@@ -43,40 +43,10 @@
   <children>
     <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
       <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
+        <Menu mnemonicParsing="false" text="Вход">
+               <items>
+                  <MenuItem fx:id="login" mnemonicParsing="false" onAction="#login" text="Войти" />
+               </items>
         </Menu>
       </menus>
     </MenuBar>
@@ -86,12 +56,15 @@
                <children>
                   <ListView fx:id="systemsview" layoutY="34.0" prefHeight="314.0" prefWidth="228.0" AnchorPane.bottomAnchor="275.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0" />
                   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="68.0" layoutY="-1.0" prefHeight="35.0" prefWidth="82.0" text="Системы" />
-                  <Label layoutX="14.0" layoutY="363.0" text="Название:" />
-                  <TextField fx:id="sNameInput" layoutX="137.0" layoutY="359.0" prefHeight="24.0" prefWidth="91.0" />
-                  <Label layoutX="14.0" layoutY="396.0" text="Тип:" />
-                  <ChoiceBox fx:id="sTypeBox" layoutX="137.0" layoutY="392.0" prefHeight="24.0" prefWidth="91.0" />
-                  <Label layoutX="14.0" layoutY="430.0" text="Специализация:" />
-                  <ChoiceBox fx:id="sSpecBox" layoutX="137.0" layoutY="426.0" prefHeight="24.0" prefWidth="91.0" />
+                  <Label layoutX="14.0" layoutY="397.0" text="Название:" />
+                  <TextField fx:id="sNameInput" layoutX="137.0" layoutY="393.0" prefHeight="24.0" prefWidth="91.0" />
+                  <Label layoutX="14.0" layoutY="430.0" text="Тип:" />
+                  <ChoiceBox fx:id="sTypeBox" layoutX="137.0" layoutY="426.0" prefHeight="24.0" prefWidth="91.0" />
+                  <Label layoutX="14.0" layoutY="464.0" text="Специализация:" />
+                  <ChoiceBox fx:id="sSpecBox" layoutX="137.0" layoutY="460.0" prefHeight="24.0" prefWidth="91.0" />
+                  <Button fx:id="addSystem" layoutY="348.0" mnemonicParsing="false" onAction="#addSystem" prefHeight="24.0" prefWidth="112.0" text="Добавить" />
+                  <Button fx:id="changeSystem" layoutX="152.0" layoutY="501.0" mnemonicParsing="false" text="Ок" />
+                  <Button fx:id="deleteSystem" layoutX="116.0" layoutY="348.0" mnemonicParsing="false" onAction="#deleteSystem" prefHeight="24.0" prefWidth="112.0" text="Удалить" />
                </children>
         </AnchorPane>
         <ScrollPane maxWidth="-Infinity" prefHeight="623.0" prefWidth="401.0">
@@ -100,35 +73,39 @@
               <children>
                         <TabPane fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="623.0" prefWidth="401.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
                           <tabs>
-                            <Tab fx:id="rulesTab" text="Rules">
+                            <Tab fx:id="rulesTab" text="Правила">
                               <content>
                                 <AnchorPane maxHeight="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="593.0" prefWidth="401.0">
                                        <children>
                                           <ListView fx:id="rulesView" layoutY="-1.0" prefHeight="314.0" prefWidth="401.0" AnchorPane.bottomAnchor="279.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0" />
-                                          <TableView fx:id="outputTable" layoutY="342.0" prefHeight="250.0" prefWidth="401.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="342.0">
+                                          <TableView fx:id="outputTable" layoutY="369.0" prefHeight="223.0" prefWidth="401.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="369.0">
                                             <columns>
                                               <TableColumn fx:id="varNameColumn" editable="false" prefWidth="213.0" text="Переменная" />
                                               <TableColumn fx:id="varValueColumn" editable="false" prefWidth="209.0" text="Значение" />
                                             </columns>
                                           </TableView>
-                                          <Button fx:id="getOutputButton" layoutX="64.0" layoutY="313.0" mnemonicParsing="false" text="Получить результат работы системы" />
+                                          <Button fx:id="getOutputButton" layoutX="64.0" layoutY="345.0" mnemonicParsing="false" text="Получить результат работы системы" />
+                                          <Button fx:id="addRule" layoutY="313.0" mnemonicParsing="false" onAction="#addRule" prefHeight="24.0" prefWidth="201.0" text="Добавить" />
+                                          <Button fx:id="deleteRule" layoutX="202.0" layoutY="313.0" mnemonicParsing="false" onAction="#deleteRule" prefHeight="24.0" prefWidth="198.0" text="Удалить" />
                                        </children></AnchorPane>
                               </content>
                             </Tab>
-                            <Tab fx:id="variablesTab" text="Variables">
+                            <Tab fx:id="variablesTab" text="Переменные">
                               <content>
                                 <AnchorPane maxHeight="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="592.0" prefWidth="353.0">
                                        <children>
                                           <ListView fx:id="variablesView" prefHeight="312.0" prefWidth="401.0" AnchorPane.bottomAnchor="280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                          <Label layoutX="14.0" layoutY="335.0" prefHeight="21.0" prefWidth="146.0" text="Переменная:" />
-                                          <TextField fx:id="variableValue" layoutX="225.0" layoutY="369.0" prefHeight="24.0" prefWidth="91.0" />
-                                          <Label layoutX="14.0" layoutY="367.0" prefHeight="27.0" prefWidth="98.0" text="Значение:" />
-                                          <Button fx:id="varValueOk" layoutX="298.0" layoutY="465.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="41.0" text="Ок" />
-                                          <Label layoutX="15.0" layoutY="401.0" prefHeight="27.0" prefWidth="195.0" text="Минимальное значение:" />
-                                          <Label layoutX="15.0" layoutY="436.0" prefHeight="21.0" prefWidth="183.0" text="Максимальное значение:" />
-                                          <TextField fx:id="variableMinValue" editable="false" layoutX="225.0" layoutY="403.0" prefHeight="24.0" prefWidth="91.0" />
-                                          <TextField fx:id="variableMaxValue" editable="false" layoutX="225.0" layoutY="435.0" prefHeight="24.0" prefWidth="91.0" />
-                                          <TextField fx:id="variableName" editable="false" layoutX="225.0" layoutY="334.0" prefHeight="24.0" prefWidth="91.0" />
+                                          <Label fx:id="variableNameLabel" layoutX="14.0" layoutY="362.0" prefHeight="21.0" prefWidth="146.0" text="Переменная:" />
+                                          <TextField fx:id="variableValue" layoutX="225.0" layoutY="396.0" prefHeight="24.0" prefWidth="91.0" />
+                                          <Label fx:id="variableValueLabel" layoutX="14.0" layoutY="394.0" prefHeight="27.0" prefWidth="98.0" text="Значение:" />
+                                          <Button fx:id="varValueOk" layoutX="298.0" layoutY="492.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="41.0" text="Ок" />
+                                          <Label fx:id="minValueLabel" layoutX="15.0" layoutY="428.0" prefHeight="27.0" prefWidth="195.0" text="Минимальное значение:" />
+                                          <Label fx:id="maxValueLabel" layoutX="15.0" layoutY="463.0" prefHeight="21.0" prefWidth="183.0" text="Максимальное значение:" />
+                                          <TextField fx:id="variableMinValue" editable="false" layoutX="225.0" layoutY="430.0" prefHeight="24.0" prefWidth="91.0" />
+                                          <TextField fx:id="variableMaxValue" editable="false" layoutX="225.0" layoutY="462.0" prefHeight="24.0" prefWidth="91.0" />
+                                          <TextField fx:id="variableName" editable="false" layoutX="225.0" layoutY="361.0" prefHeight="24.0" prefWidth="91.0" />
+                                          <Button fx:id="addVariable" layoutY="312.0" mnemonicParsing="false" onAction="#addVariable" prefHeight="24.0" prefWidth="202.0" text="Добавить" />
+                                          <Button fx:id="deleteVariable" layoutX="203.0" layoutY="312.0" mnemonicParsing="false" onAction="#deleteVariable" prefHeight="24.0" prefWidth="199.0" text="Удалить" />
                                        </children></AnchorPane>
                               </content>
                             </Tab>
@@ -151,9 +128,9 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="263.0">
                            <children>
-                              <ListView fx:id="membershipFunctionsView" layoutX="-32.0" layoutY="29.0" prefHeight="314.0" prefWidth="220.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="29.0" />
+                              <ListView fx:id="membershipFunctionsView" layoutX="-32.0" layoutY="29.0" prefHeight="288.0" prefWidth="215.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="29.0" />
                               <Label fx:id="mfAntecedentsLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="47.0" layoutY="8.0" prefHeight="27.0" prefWidth="220.0" text="Функции принадлежности" AnchorPane.bottomAnchor="316.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="0.0" />
-                              <Label fx:id="mfParamsLabel" layoutX="229.0" layoutY="7.0" text="Параметры:" visible="false" />
+                              <Label fx:id="mfParamsLabel" layoutX="229.0" layoutY="7.0" text="Параметры:" />
                               <Label fx:id="mfTermLabel" layoutX="229.0" layoutY="36.0" prefHeight="16.0" prefWidth="83.0" text="Терм:" visible="false" />
                               <Label fx:id="mfTypeLabel" layoutX="229.0" layoutY="67.0" prefHeight="16.0" prefWidth="67.0" text="Тип:" visible="false" />
                               <Label fx:id="mfVariableLabel" layoutX="229.0" layoutY="100.0" prefHeight="16.0" prefWidth="91.0" text="Переменная:" visible="false" AnchorPane.bottomAnchor="227.0" AnchorPane.leftAnchor="229.0" AnchorPane.topAnchor="100.0" />
@@ -172,18 +149,26 @@
                               <TextField fx:id="termInput" layoutX="321.0" layoutY="32.0" prefHeight="24.0" prefWidth="91.0" visible="false" />
                               <ChoiceBox fx:id="pidBox" layoutX="320.0" layoutY="132.0" prefHeight="24.0" prefWidth="91.0" visible="false" />
                               <ChoiceBox fx:id="barBox" layoutX="320.0" layoutY="164.0" prefHeight="24.0" prefWidth="91.0" visible="false" />
-                              <ChoiceBox fx:id="antVarBox" layoutX="320.0" layoutY="75.0" prefHeight="24.0" prefWidth="91.0" />
-                              <Label fx:id="antVarLabel" layoutX="222.0" layoutY="77.0" prefHeight="21.0" prefWidth="98.0" text="Переменная:" />
-                              <Label fx:id="isLabel" alignment="CENTER" layoutX="259.0" layoutY="122.0" prefHeight="21.0" prefWidth="98.0" text="is" textAlignment="CENTER" />
-                              <ChoiceBox fx:id="antTermBox" layoutX="321.0" layoutY="164.0" prefHeight="24.0" prefWidth="91.0" />
-                              <Label fx:id="antTermLabel" layoutX="222.0" layoutY="166.0" prefHeight="21.0" prefWidth="98.0" text="Терм:" />
-                              <ChoiceBox fx:id="antConBox" layoutX="276.0" layoutY="246.0" prefHeight="24.0" prefWidth="91.0" />
-                              <Label fx:id="antConLabel" layoutX="222.0" layoutY="210.0" prefHeight="21.0" prefWidth="162.0" text="Связь антецедентов:" />
+                              <ChoiceBox fx:id="antVarBox" layoutX="322.0" layoutY="51.0" prefHeight="24.0" prefWidth="91.0" />
+                              <Label fx:id="antVarLabel" layoutX="222.0" layoutY="53.0" prefHeight="21.0" prefWidth="98.0" text="Переменная:" />
+                              <Label fx:id="isLabel" alignment="CENTER" layoutX="263.0" layoutY="86.0" prefHeight="21.0" prefWidth="98.0" text="is" textAlignment="CENTER" />
+                              <ChoiceBox fx:id="antTermBox" layoutX="322.0" layoutY="120.0" prefHeight="24.0" prefWidth="91.0" />
+                              <Label fx:id="antTermLabel" layoutX="222.0" layoutY="122.0" prefHeight="21.0" prefWidth="98.0" text="Терм:" />
+                              <ChoiceBox fx:id="antConBox" layoutX="275.0" layoutY="200.0" prefHeight="24.0" prefWidth="91.0" />
+                              <Label fx:id="antConLabel" layoutX="222.0" layoutY="163.0" prefHeight="21.0" prefWidth="162.0" text="Связь антецедентов:" />
+                              <Button fx:id="changeAntecedent" layoutX="364.0" layoutY="285.0" mnemonicParsing="false" onAction="#changeAntecedent" prefHeight="24.0" prefWidth="41.0" text="Ок" />
+                              <Button fx:id="addMf" layoutY="317.0" mnemonicParsing="false" onAction="#addMf" prefHeight="24.0" prefWidth="105.0" text="Добавить" visible="false" />
+                              <Button fx:id="changeMf" layoutX="375.0" layoutY="297.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="41.0" text="Ок" visible="false" />
+                              <Button fx:id="deleteMf" layoutX="108.0" layoutY="317.0" mnemonicParsing="false" onAction="#deleteMf" prefHeight="24.0" prefWidth="105.0" text="Удалить" visible="false" />
+                              <Button fx:id="addAnt" layoutY="317.0" mnemonicParsing="false" onAction="#addAntecedent" prefHeight="24.0" prefWidth="105.0" text="Добавить" visible="false" />
+                              <Button fx:id="deleteAnt" layoutX="108.0" layoutY="317.0" mnemonicParsing="false" onAction="#deleteAntecedent" prefHeight="24.0" prefWidth="105.0" text="Удалить" visible="false" />
+                              <Label fx:id="ruleWeightLabel" layoutX="222.0" layoutY="248.0" prefHeight="21.0" prefWidth="98.0" text="Вес правила:" />
+                              <TextField fx:id="ruleWeightInput" layoutX="322.0" layoutY="247.0" prefHeight="24.0" prefWidth="91.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="293.0" prefWidth="425.0">
                            <children>
-                              <LineChart fx:id="mfGraph" layoutY="31.0" legendVisible="false" prefHeight="272.0" prefWidth="220.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="0.0">
+                              <LineChart fx:id="mfGraph" layoutX="19.0" layoutY="31.0" legendVisible="false" prefHeight="272.0" prefWidth="401.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <xAxis>
                                   <NumberAxis side="BOTTOM" />
                                 </xAxis>
@@ -191,7 +176,7 @@
                                   <NumberAxis side="LEFT" />
                                 </yAxis>
                               </LineChart>
-                              <ListView fx:id="consList" layoutX="-12.0" layoutY="32.0" prefHeight="240.0" prefWidth="215.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="32.0" />
+                              <ListView fx:id="consList" layoutX="-12.0" layoutY="32.0" prefHeight="218.0" prefWidth="215.0" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="32.0" />
                               <Label fx:id="conLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="1.0" prefHeight="27.0" prefWidth="220.0" text="Консеквенты" />
                               <ChoiceBox fx:id="conVarBox" layoutX="321.0" layoutY="50.0" prefHeight="24.0" prefWidth="91.0" />
                               <Label fx:id="conVarLabel" layoutX="223.0" layoutY="52.0" prefHeight="21.0" prefWidth="98.0" text="Переменная:" />
@@ -200,6 +185,9 @@
                               <Label fx:id="conVarTermLabel" layoutX="224.0" layoutY="142.0" prefHeight="21.0" prefWidth="98.0" text="Переменная:" />
                               <Label fx:id="conCoeffLabel" layoutX="220.0" layoutY="115.0" prefHeight="21.0" prefWidth="112.0" text="Коэффициент:" />
                               <TextField fx:id="conCoeffInput" editable="false" layoutX="322.0" layoutY="113.0" prefHeight="24.0" prefWidth="91.0" />
+                              <Button fx:id="changeConsequent" layoutX="372.0" layoutY="172.0" mnemonicParsing="false" onAction="#changeConsequent" prefHeight="24.0" prefWidth="41.0" text="Ок" />
+                              <Button fx:id="addConsequent" layoutX="-2.0" layoutY="250.0" mnemonicParsing="false" onAction="#addConsequent" prefHeight="24.0" prefWidth="105.0" text="Добавить" />
+                              <Button fx:id="deleteConsequent" layoutX="108.0" layoutY="250.0" mnemonicParsing="false" onAction="#deleteConsequent" prefHeight="24.0" prefWidth="105.0" text="Удалить" />
                            </children></AnchorPane>
                     </items>
                   </SplitPane>
@@ -209,16 +197,14 @@
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
-          <font>
-            <Font size="11.0" fx:id="x3" />
-          </font>
-          <textFill>
-            <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
-          </textFill>
-        </Label>
         <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+        <Label maxWidth="-1.0" text="Right status" visible="false" HBox.hgrow="NEVER">
+               <font>
+            <Font size="11.0" fx:id="x3" />
+               </font>
+               <textFill>
+            <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
+               </textFill></Label>
       </children>
       <padding>
         <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />

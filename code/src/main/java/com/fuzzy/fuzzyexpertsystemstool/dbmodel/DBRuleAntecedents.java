@@ -5,8 +5,6 @@ public class DBRuleAntecedents {
 
     private int antecendentId;
 
-    public DBRuleAntecedents(){}
-
     public int getRuleId() {
         return ruleId;
     }

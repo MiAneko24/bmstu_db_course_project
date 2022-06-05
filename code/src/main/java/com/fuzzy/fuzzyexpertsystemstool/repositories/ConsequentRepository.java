@@ -23,10 +23,11 @@ public class ConsequentRepository {
         for (DBConsequent c: dbConsequents) {
             Integer vId = c.getVariableId();
             Variable variable = (vId != null) ? variableRepository.getVariable(vId) : null;
-            MembershipFunction membershipFunction = membershipFunctionRepository.getMembershipFunction(c.getMembershipFunctionId());
             consequents.add(new Consequent(
                     c.getId(),
-                    membershipFunction,
+                    (c.getMembershipFunctionId() != null)
+                            ? membershipFunctionRepository.getMembershipFunction(c.getMembershipFunctionId())
+                            : null,
                     variable,
                     getConsequentText(c.getId())
             ));
@@ -42,21 +43,25 @@ public class ConsequentRepository {
         DBConsequent consequent = getConsequent(cId);
         StringBuilder text = new StringBuilder();
         if (consequent != null) {
-            MembershipFunction function =
-                    membershipFunctionRepository.getMembershipFunction(consequent.getMembershipFunctionId());
-            Integer vId = consequent.getVariableId();
-            if (vId != null) {
-                text.append(variableRepository.getVariableText(consequent.getVariableId()))
-                        .append(" = ")
-                        .append(function.getParameter1());
-                if (function.getmType() == FunctionType.Linear)
-                    text.append(" ").append(function.getVariable().getName());
+            if (consequent.getMembershipFunctionId() != null) {
+                MembershipFunction function =
+                        membershipFunctionRepository.getMembershipFunction(consequent.getMembershipFunctionId());
+                Integer vId = consequent.getVariableId();
+                if (vId != null) {
+                    text.append(variableRepository.getVariableText(consequent.getVariableId()))
+                            .append(" = ")
+                            .append(function.getParameter1());
+                    if (function.getmType() == FunctionType.Linear)
+                        text.append(" ").append(function.getVariable().getName());
 
-            } else {
-                text.append(function.getVariable().getName())
-                        .append(" is ")
-                        .append(function.getTerm());
-            }
+                } else if (function.getVariable() != null) {
+                    text.append(function.getVariable().getName())
+                            .append(" is ")
+                            .append(function.getTerm());
+                } else
+                    text.append("consequent");
+            } else
+                text.append("consequent");
         }
         return text.toString();
     }
@@ -72,36 +77,70 @@ public class ConsequentRepository {
         }
         for (Integer i : consFiltered.keySet()) {
             List<DBConsequent> cons = consFiltered.get(i);
-            StringBuilder stringBuilder = new StringBuilder(variableRepository.getVariableText(cons.get(0).getVariableId())
-                    + " =");
-            for (int j = 0; j < cons.size(); j++) {
-                DBConsequent cur = cons.get(j);
-                MembershipFunction function = membershipFunctionRepository.getMembershipFunction(cur.getMembershipFunctionId());
-                if (j != 0 && function.getParameter1() > 0) {
-                    stringBuilder.append(" +");
+            if (cons.get(0).getVariableId() != null) {
+                StringBuilder stringBuilder = new StringBuilder(variableRepository.getVariableText(cons.get(0).getVariableId())
+                        + " =");
+                for (int j = 0; j < cons.size(); j++) {
+                    DBConsequent cur = cons.get(j);
+                    MembershipFunction function = membershipFunctionRepository.getMembershipFunction(cur.getMembershipFunctionId());
+                    if (j != 0 && function.getParameter1() > 0) {
+                        stringBuilder.append(" +");
+                    }
+                    stringBuilder.append(" ").append(function.getParameter1());
+                    if (function.getmType() == FunctionType.Linear)
+                        stringBuilder.append(" ").append(function.getVariable().getName());
                 }
-                stringBuilder.append(" ").append(function.getParameter1());
-                if (function.getmType() == FunctionType.Linear)
-                    stringBuilder.append(" ").append(function.getVariable().getName());
+                result.add(stringBuilder.toString());
             }
-            result.add(stringBuilder.toString());
         }
         return result;
     }
 
     public List<String> getConsequentsText(int rId) {
-        List<String> result;
+        List<String> result = new ArrayList<>();
         List<DBConsequent> consequents = consequentDao.getAll(rId);
-        if (consequents.get(0).getVariableId() != null) {
-            result = getConsequentsSugeno(consequents);
-        }
-        else {
-            result = new ArrayList<>();
-            for (DBConsequent c : consequents) {
-                MembershipFunction function = membershipFunctionRepository.getMembershipFunction(c.getMembershipFunctionId());
-                result.add(function.getVariable().getName() + " is " + function.getTerm());
+        if (consequents.size() != 0)
+            if (consequents.get(0).getVariableId() != null) {
+                result = getConsequentsSugeno(consequents);
+            }
+            else {
+                result = new ArrayList<>();
+                for (DBConsequent c : consequents) {
+                    if (c.getMembershipFunctionId() != null) {
+                        MembershipFunction function = membershipFunctionRepository.getMembershipFunction(c.getMembershipFunctionId());
+                        result.add(function.getVariable().getName() + " is " + function.getTerm());
+                    }
+                }
+            }
+        return result;
+    }
+
+    private DBConsequent transform(Consequent consequent, int rId) {
+        return (consequent != null)
+                ? new DBConsequent(consequent.getId(),
+                    (consequent.getMembershipFunction() != null)
+                            ? consequent.getMembershipFunction().getId()
+                            : null,
+                rId,
+                    (consequent.getVariable() != null)
+                            ? consequent.getVariable().getId()
+                            : null)
+                : null;
+    }
+
+    public void save(List<Consequent> consequents, int rId) {
+        if ( consequents != null) {
+            for (Consequent c: consequents) {
+                membershipFunctionRepository.save(c.getMembershipFunction());
+                consequentDao.save(transform(c, rId));
             }
         }
-        return result;
+    }
+    public void delete(List<Consequent> consequents, int rId) {
+        if ( consequents != null) {
+            for (Consequent c: consequents) {
+                consequentDao.delete(transform(c, rId));
+            }
+        }
     }
 }

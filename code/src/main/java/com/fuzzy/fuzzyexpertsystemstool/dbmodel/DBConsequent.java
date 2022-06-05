@@ -3,7 +3,7 @@ package com.fuzzy.fuzzyexpertsystemstool.dbmodel;
 public class DBConsequent {
     private int id;
 
-    private int membershipFunctionId;
+    private Integer membershipFunctionId;
 
     private int ruleId;
 
@@ -15,7 +15,7 @@ public class DBConsequent {
         return id;
     }
 
-    public int getMembershipFunctionId() {
+    public Integer getMembershipFunctionId() {
         return membershipFunctionId;
     }
 
@@ -27,7 +27,7 @@ public class DBConsequent {
         return variableId;
     }
 
-    public DBConsequent(int cId, int mf, int r, Integer var) {
+    public DBConsequent(int cId, Integer mf, int r, Integer var) {
         id = cId;
         membershipFunctionId = mf;
         variableId = var;

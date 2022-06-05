@@ -7,6 +7,8 @@ import com.fuzzy.fuzzyexpertsystemstool.model.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class VariableRepository {
     private Dao<DBVariable> variableDao = new VariableDao();
@@ -43,14 +45,48 @@ public class VariableRepository {
         return null;
     }
 
-    public void save(Variable variable) {
-        variableDao.save(new DBVariable(
+    private DBVariable transform(Variable variable) {
+        return new DBVariable(
                 variable.getId(),
                 variable.getName(),
                 variable.getMinValue(),
                 variable.getMaxValue(),
                 variable.getValue(),
                 variable.getSystemId()
-                ));
+        );
     }
+
+    public List<String> save(Variable variable) {
+        List<String> res= null;
+        if (variable != null) {
+            variableDao.save(transform(variable));
+            res = getVariableList(variable.getSystemId());
+        }
+        return res;
+    }
+
+
+    public List<String> delete(Variable variable) {
+        List<String> res = null;
+        if (variable != null) {
+            DBVariable dbVariable = transform(variable);
+            variableDao.delete(dbVariable);
+            res = getVariableList(dbVariable.getSystemId());
+        }
+        return res;
+    }
+
+    public Variable getVariableByName(String name, int sId) {
+        List<DBVariable> lstvariable = variableDao.getAll(sId).stream().filter(v -> {return Objects.equals(v.getName(), name);}).collect(Collectors.toList());
+        DBVariable variable = (lstvariable.size() > 0) ? lstvariable.get(0) : null;
+        return (variable != null)
+                ? new Variable(variable.getId(),
+                variable.getName(),
+                variable.getMinValue(),
+                variable.getMaxValue(),
+                variable.getValue(),
+                variable.getSystemId())
+                : null;
+    }
+
 }

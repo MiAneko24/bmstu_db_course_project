@@ -58,6 +58,10 @@ public class MembershipFunctionDao implements Dao<DBMembershipFunction> {
             List<UserType> types = connection.getUserTypes();
             if (types == null)
                 return;
+            if (get(dbMembershipFunction.getId()) != null) {
+                update(dbMembershipFunction);
+                return;
+            }
             StringBuilder query = new StringBuilder("insert into");
             if (types.contains(UserType.Admin))
                 query.append(" membership_function");
@@ -70,17 +74,17 @@ public class MembershipFunctionDao implements Dao<DBMembershipFunction> {
             else
                 return;
             query.append(" values" + "(")
-                    .append(dbMembershipFunction.getId()).append(", ")
-                    .append(dbMembershipFunction.getTerm()).append(", ")
-                    .append(dbMembershipFunction.getmType()).append(", ")
+                    .append(dbMembershipFunction.getId()).append(", '")
+                    .append(dbMembershipFunction.getTerm()).append("', '")
+                    .append(dbMembershipFunction.getmType()).append("', ")
                     .append(dbMembershipFunction.getVariableId()).append(", ")
                     .append(dbMembershipFunction.getParameter1()).append(", ")
                     .append(dbMembershipFunction.getParameter2()).append(", ")
                     .append(dbMembershipFunction.getParameter3()).append(", ")
                     .append(dbMembershipFunction.getParameter4())
                     .append(", null, ")
-                    .append(dbMembershipFunction.getPid()).append(", ")
-                    .append(dbMembershipFunction.getBarrier()).append(", ")
+                    .append(dbMembershipFunction.getPid()).append(", '")
+                    .append(dbMembershipFunction.getBarrier()).append("', ")
                     .append(dbMembershipFunction.isActive()).append(");");
             PreparedStatement st = connection.getPreparedStatement(query.toString());
             try {
@@ -110,16 +114,16 @@ public class MembershipFunctionDao implements Dao<DBMembershipFunction> {
                 query.append(" informatics_expert_membership_functions");
             else
                 return;
-            query.append(" set term = ").append(dbMembershipFunction.getTerm())
-                    .append(", m_type = ").append(dbMembershipFunction.getmType())
-                    .append(", v_id = ").append(dbMembershipFunction.getVariableId())
+            query.append(" set term = '").append(dbMembershipFunction.getTerm())
+                    .append("', m_type = '").append(dbMembershipFunction.getmType())
+                    .append("', v_id = ").append(dbMembershipFunction.getVariableId())
                     .append(", parameter1 = ").append(dbMembershipFunction.getParameter1())
                     .append(", parameter2 = ").append(dbMembershipFunction.getParameter2())
                     .append(", parameter3 = ").append(dbMembershipFunction.getParameter3())
                     .append(", parameter4 = ").append(dbMembershipFunction.getParameter4())
                     .append(", p_id=").append(dbMembershipFunction.getPid())
-                    .append(", barrier = ").append(dbMembershipFunction.getBarrier())
-                    .append(", is_active = ").append(dbMembershipFunction.isActive())
+                    .append(", barrier = '").append(dbMembershipFunction.getBarrier())
+                    .append("', is_active = ").append(dbMembershipFunction.isActive())
                     .append(" where m_id = ").append(dbMembershipFunction.getId()).append(";");
             PreparedStatement st = connection.getPreparedStatement(query.toString());
             try {

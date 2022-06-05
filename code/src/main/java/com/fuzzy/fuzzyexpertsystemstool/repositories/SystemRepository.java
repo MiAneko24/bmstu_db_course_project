@@ -3,6 +3,7 @@ package com.fuzzy.fuzzyexpertsystemstool.repositories;
 import com.fuzzy.fuzzyexpertsystemstool.dao.Dao;
 import com.fuzzy.fuzzyexpertsystemstool.dao.SystemDao;
 import com.fuzzy.fuzzyexpertsystemstool.dbmodel.DBSystem;
+import com.fuzzy.fuzzyexpertsystemstool.model.FSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,34 @@ public class SystemRepository {
         return null;
     }
 
-    public DBSystem getSystem(int sId) {
-        return systemDao.get(sId);
+    public FSystem getSystem(int sId) {
+        DBSystem system = systemDao.get(sId);
+        return (system != null)
+                ? new FSystem(system.getId(), system.getName(), system.getType(), system.getSpecialization())
+                : null;
     }
+
+    private DBSystem transform(FSystem system) {
+        return new DBSystem(system.getId(), system.getName(), system.getType(),
+                system.getSpecialization());
+    }
+
+    public List<String> save(FSystem system) {
+        List<String> res=  null;
+        if (system != null) {
+            systemDao.save(transform(system));
+            res = getSystemList();
+        }
+        return res;
+    }
+
+    public List<String> delete(FSystem system) {
+        List<String> res=  null;
+        if (system != null) {
+            systemDao.delete(transform(system));
+            res = getSystemList();
+        }
+        return res;
+    }
+
 }

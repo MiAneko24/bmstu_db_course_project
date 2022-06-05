@@ -1,11 +1,14 @@
 package com.fuzzy.fuzzyexpertsystemstool.types;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum SpecializationType {
     Physics("physics"),
     Chemistry("chemistry"),
-    Sociology("sociology");
+//    Sociology("sociology");
 //    Biology("biology"),
-//    Informatics("informatics");
+    Informatics("informatics");
 
     private String text;
 
@@ -28,9 +31,17 @@ public enum SpecializationType {
                 st = Chemistry;
                 break;
             default:
-                st = Sociology;
+                st = Informatics;
                 break;
         }
         return st;
+    }
+
+    public static List<String> getSpecializationTypes() {
+        List<String> res = new ArrayList<>();
+        res.add(Physics.toString());
+        res.add(Chemistry.toString());
+        res.add(Informatics.toString());
+        return res;
     }
 }

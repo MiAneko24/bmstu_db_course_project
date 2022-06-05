@@ -13,6 +13,8 @@ public class Rule extends Model {
     private List<Consequent> consequents;
 
     private AntecedentConnectionType antecedentConnectionType;
+    private int systemId;
+    private double weight;
 
     public int getId() {
         return id;
@@ -24,6 +26,14 @@ public class Rule extends Model {
 
     public List<Consequent> getConsequents() {
         return consequents;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getSystemId() {
+        return systemId;
     }
 
     public List<String> getAntecedentsText() {
@@ -44,18 +54,22 @@ public class Rule extends Model {
         return antecedentConnectionType;
     }
 
-    public Rule(int i, List<Antecedent> ants, List<Consequent> cons, AntecedentConnectionType conn) {
+    public Rule(int i, List<Antecedent> ants, List<Consequent> cons, AntecedentConnectionType conn, double w, int sId) {
         id = i;
         antecedents = ants;
         consequents = cons;
         antecedentConnectionType = conn;
+        systemId = sId;
+        weight = w;
     }
 
-    public Rule(List<Antecedent> ants, List<Consequent> cons, AntecedentConnectionType conn) {
+    public Rule(List<Antecedent> ants, List<Consequent> cons, AntecedentConnectionType conn, double w, int sId) {
         id = generateId();
         antecedents = ants;
         consequents = cons;
         antecedentConnectionType = conn;
+        systemId = sId;
+        weight = w;
     }
 //    private
 }

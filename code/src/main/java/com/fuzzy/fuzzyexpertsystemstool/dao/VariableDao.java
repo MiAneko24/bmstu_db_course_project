@@ -70,8 +70,8 @@ public class VariableDao implements Dao<DBVariable> {
                 query.append(" informatics_expert_variables");
             else
                 return;
-            query.append(" values" + "(").append(dbVariable.getId()).append(", ")
-                    .append(dbVariable.getName()).append(", ")
+            query.append(" values" + "(").append(dbVariable.getId()).append(", '")
+                    .append(dbVariable.getName()).append("', ")
                     .append(dbVariable.getMinValue()).append(", ")
                     .append(dbVariable.getMaxValue()).append(", null, ")
                     .append(dbVariable.getSystemId()).append(");");
@@ -102,16 +102,18 @@ public class VariableDao implements Dao<DBVariable> {
                 return;
             }
             StringBuilder query = new StringBuilder("update");
-            if (types.contains(UserType.Admin))
+            if (types.contains(UserType.Admin)) {
                 query.append(" variable");
+                System.out.println("u are an ADMIN YEP");
+            }
             else if (types.contains(UserType.ChemistryExpert))
                 query.append(" chemistry_experts_variables");
             else if (types.contains(UserType.PhysicsExpert))
                 query.append(" physics_expert_variables");
             else if (types.contains(UserType.InformaticsExpert))
                 query.append(" informatics_expert_variables");
-            query.append(" set v_name = ").append(dbVariable.getName())
-                    .append(", min_value = ").append(dbVariable.getMinValue())
+            query.append(" set v_name = '").append(dbVariable.getName())
+                    .append("', min_value = ").append(dbVariable.getMinValue())
                     .append(", max_value = ").append(dbVariable.getMaxValue())
                     .append(", v_value = ").append(dbVariable.getValue())
                     .append(", s_id = ").append(dbVariable.getSystemId())

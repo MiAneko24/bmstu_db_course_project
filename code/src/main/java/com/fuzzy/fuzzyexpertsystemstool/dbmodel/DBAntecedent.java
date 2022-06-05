@@ -3,7 +3,7 @@ package com.fuzzy.fuzzyexpertsystemstool.dbmodel;
 public class DBAntecedent {
     private int id;
 
-    private int membershipFunctionId;
+    private Integer membershipFunctionId;
 
     public DBAntecedent(){}
 
@@ -11,11 +11,11 @@ public class DBAntecedent {
         return id;
     }
 
-    public int getMembershipFunctionId() {
+    public Integer getMembershipFunctionId() {
         return membershipFunctionId;
     }
 
-    public DBAntecedent(int a_id, int mf) {
+    public DBAntecedent(int a_id, Integer mf) {
         id = a_id;
         membershipFunctionId = mf;
     }

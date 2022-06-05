@@ -5,7 +5,7 @@ public enum UserType {
     InformaticsExpert("informatics"),
     PhysicsExpert("physics"),
     ChemistryExpert("chemistry"),
-    Admin("admin");
+    Admin("administrator");
 
     private String text;
 

@@ -57,6 +57,10 @@ public class AntecedentDao implements Dao<DBAntecedent> {
             List<UserType> types = connection.getUserTypes();
             if (types == null)
                 return;
+            if (get(dbAntecedent.getId()) != null) {
+                update(dbAntecedent);
+                return;
+            }
             StringBuilder query = new StringBuilder("insert into");
             if (types.contains(UserType.Admin))
                 query.append(" antecedent");
@@ -134,7 +138,7 @@ public class AntecedentDao implements Dao<DBAntecedent> {
                 query.append(" informatics_expert_antecedents");
             else
                 return;
-            query.append("where a_id = ").append(dbAntecedent.getId()).append(";");
+            query.append(" where a_id = ").append(dbAntecedent.getId()).append(";");
             PreparedStatement st = connection.getPreparedStatement(query.toString());
             try {
                 st.executeUpdate();

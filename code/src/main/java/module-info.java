@@ -11,11 +11,13 @@ module com.fuzzy.fuzzyexpertsystemstool {
     requires eu.hansolo.tilesfx;
     requires java.sql;
 //    requires javax.persistence;
-    requires org.hibernate.orm.core;
+//    requires org.hibernate.orm.core;
     requires jakarta.persistence;
+    requires redis.clients.jedis;
+    requires com.google.gson;
 //    requires javax.persistence;
 
     opens com.fuzzy.fuzzyexpertsystemstool to javafx.fxml;
-    opens com.fuzzy.fuzzyexpertsystemstool.dbmodel to javafx.base;
+    opens com.fuzzy.fuzzyexpertsystemstool.dbmodel to javafx.base, com.google.gson;
     exports com.fuzzy.fuzzyexpertsystemstool;
 }

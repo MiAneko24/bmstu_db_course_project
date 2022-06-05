@@ -1,5 +1,8 @@
 package com.fuzzy.fuzzyexpertsystemstool.types;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum AntecedentConnectionType {
     Or("or"),
     And("and");
@@ -26,5 +29,12 @@ public enum AntecedentConnectionType {
                 break;
         }
         return antecedentConnectionType;
+    }
+
+    public static List<String> getConnectionTypes() {
+        List<String> res = new ArrayList<>();
+        res.add(Or.toString());
+        res.add(And.toString());
+        return res;
     }
 }

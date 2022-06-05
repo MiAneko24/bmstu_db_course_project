@@ -57,6 +57,10 @@ public class ConsequentDao implements Dao<DBConsequent> {
             List<UserType> types = connection.getUserTypes();
             if (types == null)
                 return;
+            if (get(dbConsequent.getId()) != null) {
+                update(dbConsequent);
+                return;
+            }
             StringBuilder query = new StringBuilder("insert into");
             if (types.contains(UserType.Admin))
                 query.append(" consequent");

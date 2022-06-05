@@ -1,5 +1,7 @@
 package com.fuzzy.fuzzyexpertsystemstool.model;
 
+import java.util.Objects;
+
 public class Variable extends Model {
     private final int id;
 
@@ -57,5 +59,18 @@ public class Variable extends Model {
 
     public void setValue(Double data) {
         value = data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Variable variable = (Variable) o;
+        return id == variable.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

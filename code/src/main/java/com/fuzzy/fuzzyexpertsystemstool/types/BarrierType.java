@@ -1,5 +1,8 @@
 package com.fuzzy.fuzzyexpertsystemstool.types;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum BarrierType {
     Very("Very"),
     MoreOrLess("More or less"),
@@ -45,5 +48,16 @@ public enum BarrierType {
                     break;
         }
         return bt;
+    }
+
+    public static List<String> getBarriers() {
+        List<String> res = new ArrayList<>();
+        res.add(Very.toString());
+        res.add(NotVery.toString());
+        res.add(Nothing.toString());
+        res.add(Not.toString());
+        res.add(Plus.toString());
+        res.add(MoreOrLess.toString());
+        return res;
     }
 }

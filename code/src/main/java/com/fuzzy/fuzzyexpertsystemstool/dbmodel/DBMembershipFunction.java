@@ -79,7 +79,7 @@ public class DBMembershipFunction {
 
     public DBMembershipFunction(){}
 
-    public DBMembershipFunction(int i, String t, FunctionType type, Integer var, Double par1, Double par2, Double par3, Double par4, Double val, Integer parent, BarrierType b, boolean active) {
+    public DBMembershipFunction(int i, String t, FunctionType type, Integer var, Double par1, Double par2, Double par3, Double par4, Integer parent, BarrierType b, boolean active) {
         id = i;
         term = t;
         mType = type;
@@ -88,7 +88,6 @@ public class DBMembershipFunction {
         parameter2 = par2;
         parameter3 = par3;
         parameter4 = par4;
-        value = val;
         pid = parent;
         barrier = b;
         isActive = active;

@@ -10,8 +10,13 @@ public class AntecedentParser implements Parser<DBAntecedent> {
     public DBAntecedent parse(ResultSet res) {
         DBAntecedent ant = null;
         try {
-            if (res.next())
-                ant = new DBAntecedent(res.getInt("a_id"), res.getInt("m_id"));
+            if (res.next()) {
+                int a = res.getInt("a_id");
+                Integer m = res.getInt("m_id");
+                if (res.wasNull())
+                    m = null;
+                ant = new DBAntecedent(a, m);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -134,4 +134,14 @@ public class DBConnection {
         }
         return valid;
     }
+
+    public boolean isAdmin() {
+        return currentUser.getUserTypes().contains(UserType.Admin);
+    }
+
+    public boolean isEditable(String type) {
+        System.out.println("is expert of " + type + " = " + currentUser.getUserTypes().contains(UserType.getUserType(type)));
+        UserType t = UserType.getUserType(type);
+        return currentUser.getUserTypes().contains(t) && t != UserType.User;
+    }
 }
